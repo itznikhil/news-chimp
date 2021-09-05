@@ -1,25 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {ProgressContext} from "./Helper/context";
+import LoadingBar from "react-top-loading-bar";
+import NavBar from "./components/NavBar";
+import News from "./components/News";
 
-function App() {
+export default function App() {
+  const [progress, setProgress] = useState(0);
+  const endPoints = [
+    "/",
+    "/business",
+    "/entertainment",
+    "/health",
+    "/science",
+    "/sports",
+    "/technology",
+  ];
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ProgressContext.Provider value={{progress, setProgress}}>
+      <Router>
+        <LoadingBar
+          color="#f11946"
+          progress={progress}
+          onLoaderFinished={() => setProgress(0)}
+        />
+        <NavBar endPoints={endPoints.slice(1)}/>
+        <Switch>
+          {endPoints.map((endPoint, index) => {
+            return (
+              <Route exact path={endPoint} key={index}>
+                <News category={endPoint.slice(1)} />
+              </Route>
+            );
+          })}
+        </Switch>
+      </Router>
+    </ProgressContext.Provider>
   );
 }
-
-export default App;
