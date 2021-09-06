@@ -9,12 +9,21 @@ export default function App() {
   const [progress, setProgress] = useState(0);
   const endPoints = [
     "/",
+    "/sport",
+    "/tech",
+    "/world",
+    "/finance",
+    "/politics",
     "/business",
+    "/economics",
     "/entertainment",
-    "/health",
+    "/beauty",
+    "/travel",
+    "/music",
+    "/food",
     "/science",
-    "/sports",
-    "/technology",
+    "/gaming",
+
   ];
   return (
     <ProgressContext.Provider value={{progress, setProgress}}>
@@ -29,7 +38,7 @@ export default function App() {
           {endPoints.map((endPoint, index) => {
             return (
               <Route exact path={endPoint} key={index}>
-                <News category={endPoint.slice(1)} />
+                <News topic={endPoint.slice(1)} />
               </Route>
             );
           })}

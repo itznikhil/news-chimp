@@ -14,21 +14,26 @@ export default function NewsItem({article}) {
         }}
       >
         <Badge pill bg="danger">
-          {article.source.name}
+          {article.rights}
         </Badge>
       </div>
       <Card.Img
         variant="top"
-        src={article.urlToImage ? article.urlToImage : NotAvailable}
+        src={article.media ? article.media : NotAvailable}
+        onError={
+          (e) => {
+            e.target.onerror = null 
+            e.target.src = NotAvailable
+          }
+        }
       />
       <Card.Body>
         <Card.Title>{article.title}</Card.Title>
         <Card.Subtitle>
-          By {article.author ? article.author : "Unknown"} on{" "}
-          {new Date(article.publishedAt).toGMTString()}
+          By {article.author ? article.author : "Unknown"} on article.published_date
         </Card.Subtitle>
-        <Card.Text>{article.description}</Card.Text>
-        <Button variant="primary" size="sm" href={article.url}>
+        <Card.Text>{article.summary}</Card.Text>
+        <Button variant="primary" size="sm" href={article.link}>
           Read More
         </Button>
       </Card.Body>

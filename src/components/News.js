@@ -5,7 +5,7 @@ import Loader from "./Loader";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PropTypes from "prop-types";
 
-export default function News({ country, pageSize, category }) {
+export default function News({ country, pageSize, topic, language }) {
   const [articles, setArticles] = useState([]);
   const [page, setPage] = useState(0);
   const [totalResults, setTotalResults] = useState(0);
@@ -20,13 +20,19 @@ export default function News({ country, pageSize, category }) {
 
   const updateArticles = async () => {
     const apiKey = process.env.REACT_APP_API_KEY;
-    setPage(page + 1);
     const response = await fetch(
-      `https://newsapi.org/v2/top-headlines?country=${country}&pageSize=${pageSize}&page=${page}&category=${category}&apiKey=${apiKey}`
+      `https://api.newscatcherapi.com/v2/latest_headlines?countries=${country}&topic=${topic}&lang=${language}&page_size=${pageSize}&page=${page + 1}`,
+      {
+        headers: {
+          "X-Api-Key": apiKey
+        }
+      } 
     );
     const jsonData = await response.json();
-    setTotalResults(jsonData.totalResults);
+    console.log(jsonData)
+    setTotalResults(jsonData.total_hits);
     setArticles(articles.concat(jsonData.articles));
+    setPage(page + 1)
   };
   return (
     <>
@@ -61,10 +67,12 @@ export default function News({ country, pageSize, category }) {
 News.defaultProps = {
   country: "in",
   pageSize: 10,
-  category: "general",
+  topic: "news",
+  language:"en"
 };
 News.propTypes = {
   country: PropTypes.string,
   pageSize: PropTypes.number,
-  category: PropTypes.string,
+  topic: PropTypes.string,
+  language: PropTypes.string,
 };
